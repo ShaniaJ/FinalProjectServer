@@ -1,0 +1,45 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Smith",
+      "department": "Accounting"
+    },
+    {
+      "id": 2,
+      "firstName": "Peter",
+      "lastName": "Armstrong",
+      "department": "Sales"
+    },
+    {
+      "id": 3,
+      "firstName": "Tom",
+      "lastName": "Adams",
+      "department": "Finance"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "description": "Edit website for clarity",
+      "priorityLevel": "Low",
+      "completionStatus": false,
+      "EmployeeId": 1
+    },
+    {
+      "id": 2,
+      "description": "Do product review",
+      "priorityLevel": "Medium",
+      "completionStatus": true,
+      "EmployeeId": 2
+    },
+    {
+      "id": 3,
+      "description": "Do payroll review",
+      "priorityLevel": "High",
+      "completionStatus": false,
+      "EmployeeId": null
+    }
+  ]
+}
