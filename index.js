@@ -12,6 +12,14 @@ app.get('/', async (req, res) => {
     res.send(await getTasks());
 });
 
+app.post('/task/create', async (req, res) => {
+    res.send(await createTask(req.body));
+});
+
+app.post('/employee/create', async (req, res) => {
+    res.send(await createEmployee(req.body));
+});
+
 app.get('/task/:id', async (req, res) => {
     res.send(await getTask(req.params.id));
 });
