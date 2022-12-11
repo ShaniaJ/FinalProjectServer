@@ -4,6 +4,7 @@ import {
     createTask,
     deleteEmployee,
     deleteTask,
+    editEmployee,
     editTask,
     getEmployees,
     getTask,
@@ -35,6 +36,10 @@ app.get('/task/:id', async (req, res) => {
 
 app.get('/employees', async (req, res) => {
     res.send(await getEmployees());
+});
+
+app.post('/employee', async (req, res) => {
+    res.send(await editEmployee(req.body));
 });
 
 app.post('/task', async (req, res) => {
