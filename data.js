@@ -71,6 +71,36 @@ Employee.hasMany(Task);
     }
 })();
 
+
+const createEmployee = async (employee) => {
+    return {
+        employee: (await Employee.create({
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            department: employee.department
+        }, {
+            returning: true,
+            plain: true
+        }))[1].dataValues
+    }
+};
+
+
+const createTask = async (task) => {
+    return {
+        task: (await Task.create({
+            description: task.description,
+            priorityLevel: task.priorityLevel,
+            completionStatus: task.completionStatus,
+            EmployeeId: task.EmployeeId
+        }, {
+            returning: true,
+            plain: true
+        }))[1].dataValues
+    };
+};
+
+
 const getEmployees = async () => {
     return {employees: await Employee.findAll()};
 };
@@ -106,4 +136,11 @@ const editTask = async (task) => {
     };
 };
 
-export {getEmployees, getTasks, getTask, editTask};
+export {
+    getEmployees,
+    getTasks,
+    getTask,
+    editTask,
+    createTask,
+    createEmployee
+};
