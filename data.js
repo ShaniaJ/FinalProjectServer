@@ -152,11 +152,28 @@ const deleteEmployee = async (employee) => {
     });
 };
 
+const editEmployee = async (employee) => {
+    return {
+        employee: (await Employee.update({
+            firstName: employee.firstName,
+            lastName: employee.lastName,
+            department: employee.department
+        }, {
+            where: {
+                id: employee.id
+            },
+            returning: true,
+            plain: true
+        }))[1].dataValues
+    }
+};
+
 export {
     getEmployees,
     getTasks,
     getTask,
     editTask,
+    editEmployee,
     createTask,
     createEmployee,
     deleteTask,
