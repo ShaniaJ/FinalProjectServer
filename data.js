@@ -136,11 +136,29 @@ const editTask = async (task) => {
     };
 };
 
+const deleteTask = async (task) => {
+    return await Task.destroy({
+        where: {
+            id: task.id
+        }
+    });
+};
+
+const deleteEmployee = async (employee) => {
+    return await Employee.destroy({
+        where: {
+            id: employee.id
+        }
+    });
+};
+
 export {
     getEmployees,
     getTasks,
     getTask,
     editTask,
     createTask,
-    createEmployee
+    createEmployee,
+    deleteTask,
+    deleteEmployee
 };

@@ -1,5 +1,14 @@
 import express from 'express';
-import {editTask, getEmployees, getTask, getTasks} from './data.js';
+import {
+    createEmployee,
+    createTask,
+    deleteEmployee,
+    deleteTask,
+    editTask,
+    getEmployees,
+    getTask,
+    getTasks
+} from './data.js';
 import cors from 'cors';
 
 const app = express();
@@ -30,6 +39,14 @@ app.get('/employees', async (req, res) => {
 
 app.post('/task', async (req, res) => {
     res.send(await editTask(req.body));
+});
+
+app.post('/task/delete', async (req, res) => {
+    res.send(await deleteTask(req.body));
+});
+
+app.post('/employee/delete', async (req, res) => {
+    res.send(await deleteEmployee(req.body));
 });
 
 app.listen(port, () => {
