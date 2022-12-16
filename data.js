@@ -1,5 +1,5 @@
 import {config} from 'dotenv'
-import {DataTypes, Sequelize} from 'sequelize';
+import {DataTypes, Sequelize, Op} from 'sequelize';
 import initData from './fixtures/data.json' assert {type: 'json'};
 
 config(); // load environment
@@ -73,15 +73,27 @@ Employee.hasMany(Task);
 
 
 const createEmployee = async (employee) => {
-    return {
-        employee: (await Employee.create({
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            department: employee.department
+    const newEmployee = (await Employee.create({
+        firstName: employee.firstName,
+        lastName: employee.lastName,
+        department: employee.department
+    }, {
+        returning: true,
+        plain: true
+    })).dataValues;
+    if (employee.tasks?.length > 0) {
+        await Task.update({
+            EmployeeId: newEmployee.id
         }, {
-            returning: true,
-            plain: true
-        }))[1].dataValues
+            where: {
+                id: {
+                    [Op.in]: employee.tasks
+                }
+            }
+        });
+    }
+    return {
+        employee: newEmployee
     }
 };
 
@@ -96,7 +108,7 @@ const createTask = async (task) => {
         }, {
             returning: true,
             plain: true
-        }))[1].dataValues
+        })).dataValues
     };
 };
 
@@ -119,7 +131,7 @@ const getTask = async (id) => {
     };
 };
 
-const editTask = async (task) => {
+const updateTask = async (task) => {
     return {
         task: (await Task.update({
             description: task.description,
@@ -137,34 +149,60 @@ const editTask = async (task) => {
 };
 
 const deleteTask = async (task) => {
-    return await Task.destroy({
-        where: {
-            id: task.id
-        }
-    });
+    return {
+        rowsDeleted: await Task.destroy({
+            where: {
+                id: task.id
+            }
+        })
+    };
 };
 
 const deleteEmployee = async (employee) => {
-    return await Employee.destroy({
-        where: {
-            id: employee.id
-        }
-    });
-};
-
-const editEmployee = async (employee) => {
     return {
-        employee: (await Employee.update({
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            department: employee.department
-        }, {
+        rowsDeleted: await Employee.destroy({
             where: {
                 id: employee.id
-            },
-            returning: true,
-            plain: true
-        }))[1].dataValues
+            }
+        })
+    };
+};
+
+const updateEmployee = async (employee) => {
+    const updatedEmployee = (await Employee.update({
+        firstName: employee.firstName,
+        lastName: employee.lastName,
+        department: employee.department
+    }, {
+        where: {
+            id: employee.id
+        },
+        returning: true,
+        plain: true
+    }))[1].dataValues;
+    if (employee.tasks?.length > 0) {
+        await Task.update({
+            EmployeeId: updatedEmployee.id
+        }, {
+            where: {
+                id: {
+                    [Op.in]: employee.tasks
+                }
+            }
+        });
+        await Task.update({
+            EmployeeId: null
+        }, {
+            where: {
+                id: {
+                    [Op.notIn]: employee.tasks
+                },
+                EmployeeId: updatedEmployee.id
+            }
+        });
+    }
+    return {
+        employee: updatedEmployee
     }
 };
 
@@ -172,8 +210,8 @@ export {
     getEmployees,
     getTasks,
     getTask,
-    editTask,
-    editEmployee,
+    updateTask,
+    updateEmployee,
     createTask,
     createEmployee,
     deleteTask,

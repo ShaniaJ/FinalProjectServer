@@ -4,8 +4,8 @@ import {
     createTask,
     deleteEmployee,
     deleteTask,
-    editEmployee,
-    editTask,
+    updateEmployee,
+    updateTask,
     getEmployees,
     getTask,
     getTasks
@@ -39,11 +39,11 @@ app.get('/employees', async (req, res) => {
 });
 
 app.post('/employee', async (req, res) => {
-    res.send(await editEmployee(req.body));
+    res.send(await updateEmployee(req.body));
 });
 
 app.post('/task', async (req, res) => {
-    res.send(await editTask(req.body));
+    res.send(await updateTask(req.body));
 });
 
 app.post('/task/delete', async (req, res) => {
