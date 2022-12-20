@@ -1,5 +1,5 @@
-# Assignment 3 Server
-This is the server project for assignment 3. 
+#Final Server
+This is the server for the Final Project
 
 ## Requirements
 You need a clean postgres database. Rename the .env.sample to .env and change the values to your database's 
